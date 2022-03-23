@@ -13,14 +13,12 @@ export default function Chats() {
   const [ loading, setLoading ] = useState(true)
   const { user } = useAuth()
   const history = useHistory()
-
-  // logout function
+    console.log(user,'user')
   async function handleLogout() {
     await auth.signOut()
     history.push("/")
   }
 
-    // file function
   async function getFile(url) {
     let response = await fetch(url);
     let data = await response.blob();
@@ -40,7 +38,7 @@ export default function Chats() {
       axios.get(
         'https://api.chatengine.io/users/me/',
         { headers: { 
-          "project-id":'1c3eb28d-a9e1-4208-bfc6-d1095049edb9',
+          "project-id":process.env.REACT_APP_CHAT_ENGINE_PROJECT_ID,
           "user-name": user.email,
           "user-secret": user.uid
         }}
@@ -61,7 +59,7 @@ export default function Chats() {
           axios.post(
             'https://api.chatengine.io/users/',
             formdata,
-            { headers: { "private-key":'44cbb485-cd39-4151-b7c5-0303b727583a'}}
+            { headers: { "private-key": process.env.REACT_APP_CHAT_ENGINE_KEY }}
           )
           .then(() => setLoading(false))
           .catch(e => console.log('e', e.response))
@@ -89,7 +87,7 @@ export default function Chats() {
 
       <ChatEngine 
         height='calc(100vh - 66px)'
-        projectID='1c3eb28d-a9e1-4208-bfc6-d1095049edb9'
+        projectID={process.env.REACT_APP_CHAT_ENGINE_PROJECT_ID}
         userName={user.email}
         userSecret={user.uid}
       />
